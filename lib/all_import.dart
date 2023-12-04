@@ -1,0 +1,15 @@
+export 'package:firebase_auth/firebase_auth.dart';
+export 'package:flutter/material.dart';
+export 'package:magic_bakery/register/register.dart';
+export '../componant/custom_container.dart';
+export '../componant/custom_text_field.dart';
+export '../database/my_database.dart';
+export '../dialog_utils.dart';
+export '../home_screen/home_screen.dart';
+export '../validation_utils.dart';
+export 'package:google_fonts/google_fonts.dart';
+export 'package:magic_bakery/login/login_screen.dart';
+export  'package:firebase_core/firebase_core.dart';
+export  'firebase_options.dart';
+export 'package:magic_bakery/splash/splash.dart';
+export 'package:magic_bakery/splash/splash2.dart';

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1002867988520",
+    "project_id": "magic-bakery-96415",
+    "storage_bucket": "magic-bakery-96415.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002867988520:android:002b12dde819965934fd1d",
+        "android_client_info": {
+          "package_name": "com.example.magic_bakery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQQMOMzOlECzpdBl_ZkAK7umIaE1xp6ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
