@@ -1,3 +1,4 @@
+import 'package:magic_bakery/admin/admin.dart';
 import 'package:magic_bakery/all_import.dart';
 
 
@@ -13,21 +14,19 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // locale: const Locale('en'), // تحديد اللغة إلى العربية
       routes: {
         SplashPage.routeName: (context) => SplashPage(),
         SplashPage2.routeName: (context) => SplashPage2(),
         LoginPage.routeName: (context) => LoginPage(),
         RegisterScreen.routeName: (context) => RegisterScreen(),
         HomeScreen.routeName :(context) => HomeScreen(),
+        Admin.routeName :(context) => Admin(),
       },
       initialRoute:HomeScreen.routeName,
-
     );
   }
 }

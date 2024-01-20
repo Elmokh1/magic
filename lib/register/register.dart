@@ -21,110 +21,112 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(),
       body: Form(
         key: formkey,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Create a  new account",
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Color(0xff6D4404),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Create a  new account",
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Color(0xff6D4404),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              CustomTextFormField(
-                ContainerName: "Full Name",
-                controller: nameController,
-                validator: (text) {
-                  if (text == null || text.trim().isEmpty) {
-                    return 'Please Enter Full Name ';
-                  }
-                },
-                Label: "enter your name",
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              CustomTextFormField(
-                ContainerName: "E-Mail",
-                controller: emailController,
-                validator: (text) {
-                  if (text == null || text.trim().isEmpty) {
-                    return 'Please Enter Email ';
-                  }
-                  if (!ValidationUtils.isValidEmail(text)) {
-                    return 'Please Enter a Valid Email';
-                  }
-                },
-                Label: "enter your email",
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              CustomTextFormField(
-                isPassword: true,
-                ContainerName: "Password ",
-                controller: passwordController,
-                validator: (text) {
-                  if (text == null || text.trim().isEmpty) {
-                    return 'Please Enter Password ';
-                  }
-                },
-                Label: "enter your password",
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              CustomTextFormField(
-                ContainerName: "Password Confirmation",
-                isPassword: true,
-                controller: passwordConfirmationController,
-                Label: "Password Confirmation",
-                // controller: nameController,
-                validator: (text) {
-                  if (text == null || text.trim().isEmpty) {
-                    return 'Please Enter Password Confirmation ';
-                  }
-                  if (passwordController.text != text) {
-                    return "password doesn't match";
-                  }
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: CustomContainer(
-                  ontap: () {
-                    register();
+                SizedBox(
+                  height: 20,
+                ),
+                CustomTextFormField(
+                  ContainerName: "Full Name",
+                  controller: nameController,
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
+                      return 'Please Enter Full Name ';
+                    }
                   },
-                  color: Color(0xff65451F),
-                  text: "Register ",
-                  textColor: Colors.white,
+                  Label: "enter your name",
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("already have account ? "),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, LoginPage.routeName);
-                      },
-                      child: Text(
-                        "Login",
-                        style: TextStyle(
-                          color: Colors.blue,
-                        ),
-                      ))
-                ],
-              )
-            ],
+                SizedBox(
+                  height: 20,
+                ),
+                CustomTextFormField(
+                  ContainerName: "E-Mail",
+                  controller: emailController,
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
+                      return 'Please Enter Email ';
+                    }
+                    if (!ValidationUtils.isValidEmail(text)) {
+                      return 'Please Enter a Valid Email';
+                    }
+                  },
+                  Label: "enter your email",
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                CustomTextFormField(
+                  isPassword: true,
+                  ContainerName: "Password ",
+                  controller: passwordController,
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
+                      return 'Please Enter Password ';
+                    }
+                  },
+                  Label: "enter your password",
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                CustomTextFormField(
+                  ContainerName: "Password Confirmation",
+                  isPassword: true,
+                  controller: passwordConfirmationController,
+                  Label: "Password Confirmation",
+                  // controller: nameController,
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
+                      return 'Please Enter Password Confirmation ';
+                    }
+                    if (passwordController.text != text) {
+                      return "password doesn't match";
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: CustomContainer(
+                    ontap: () {
+                      register();
+                    },
+                    color: Color(0xff65451F),
+                    text: "Register ",
+                    textColor: Colors.white,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("already have account ? "),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, LoginPage.routeName);
+                        },
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ))
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -140,8 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     DialogUtils.showLoadingDialog(context, 'Loading...');
     try {
-      var result = await authService.createUserWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+      var result = await authService.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
       var myUser = MyUser.User(
         name: nameController.text,
         email: emailController.text,

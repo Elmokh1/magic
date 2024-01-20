@@ -36,8 +36,8 @@ class CustomTextFormField extends StatelessWidget {
             ),),
           ),
           Container(
-            width: 342,
-            height: 48,
+            // width: 342,
+            // height: 48,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(

@@ -1,6 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:magic_bakery/database/model/add_product.dart';
+import 'package:magic_bakery/database/model/secttions_model.dart';
+import 'package:magic_bakery/home_screen/sections/widget/product/poduct_details.dart';
+import 'package:magic_bakery/home_screen/sections/widget/product/product%20review.dart';
+import 'package:magic_bakery/home_screen/sections/widget/section/section%20review.dart';
+import 'package:magic_bakery/home_screen/sections/widget/section/section_allproduct.dart';
+
 import '../../all_import.dart';
 
-class Sections extends StatelessWidget {
+class Sections extends StatefulWidget {
+  @override
+  State<Sections> createState() => _SectionsState();
+}
+
+class _SectionsState extends State<Sections> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,229 +39,123 @@ class Sections extends StatelessWidget {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                const Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("الكل"),
-                    ),
-                    Spacer(),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("مخبوزات خاليه من السكر"),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 140,
-                  width: double.infinity,
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(
-                        width: 10,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 20,
-                      itemBuilder: (context, index) => Container(
-                        width: 240,
-                        height: 140,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: const Color(0xffE5E5E5))),
-                        child: Row(
+        body: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: StreamBuilder<QuerySnapshot<SectionsModel>>(
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    var sectionList =
+                        snapshot.data?.docs.map((doc) => doc.data()).toList();
+                    if (sectionList?.isEmpty == true) {
+                      return Center(
+                        child: Text(
+                          "!! فاضي ",
+                          style: GoogleFonts.abel(
+                            fontSize: 30,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: sectionList?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final section = sectionList![index];
+                        final secId = section.id;
+
+                        return Column(
                           children: [
-                            const Column(
-                              children: [
-                                Icon(
-                                  Icons.favorite_outlined,
-                                  color: Colors.red,
-                                ),
-                              ],
+                            InkWell(
+                              child: SectionReview(sections: section),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SectionAllProduct(
+                                        sectionsModel: section),
+                                  ),
+                                );
+                              },
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    "دونتس شيكولاته",
-                                    style: GoogleFonts.inter(
-                                      color: const Color(0xff65451F),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
+                            StreamBuilder<QuerySnapshot<AddProductModel>>(
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text(snapshot.error.toString());
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                var productList = snapshot.data?.docs
+                                    .map((doc) => doc.data())
+                                    .toList();
+                                if (productList?.isEmpty == true) {
+                                  return Center(
+                                    child: Text(
+                                      "!! فاضي ",
+                                      style: GoogleFonts.abel(
+                                        fontSize: 30,
+                                      ),
+                                    ),
+                                  );
+                                }
+
+                                return Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Container(
+                                    height: 150,
+                                    width: double.infinity,
+                                    child: ListView.builder(
+                                      itemCount: productList?.length ?? 0,
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        final product = productList![index];
+                                        return InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProductDetails(
+                                                        addProductModel:
+                                                            product),
+                                              ),
+                                            );
+                                          },
+                                          child: ProductView(
+                                              addProductModel: product),
+                                        );
+                                      },
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  "20 LE",
-                                  style: GoogleFonts.inter(
-                                    color: const Color(0xff65451F),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
+                              stream: MyDataBase.getAddProductsRealTimeUpdate(
+                                  secId ?? ""),
                             ),
-                            Image.asset("assets/images/Rectangle 29.png"),
+                            SizedBox(height: 50,)
                           ],
-                        ),
-                      ),
-                    ),
-                  ),
+                        );
+                      },
+                    );
+                  },
+                  stream: MyDataBase.getSectionsRealTimeUpdate(),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("الكل"),
-                    ),
-                    Spacer(),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("مخبوزات خاليه من السكر"),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 140,
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(
-                        width: 10,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 20,
-                      itemBuilder: (context, index) => Container(
-                        width: 240,
-                        height: 140,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: const Color(0xffE5E5E5))),
-                        child: Row(
-                          children: [
-                            const Column(
-                              children: [
-                                Icon(
-                                  Icons.favorite_outlined,
-                                  color: Colors.red,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    "دونتس شيكولاته",
-                                    style: GoogleFonts.inter(
-                                      color: const Color(0xff65451F),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  "20 LE",
-                                  style: GoogleFonts.inter(
-                                    color: const Color(0xff65451F),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Image.asset("assets/images/Rectangle 29.png"),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("الكل"),
-                    ),
-                    Spacer(),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("مخبوزات خاليه من السكر"),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 140,
-                  width: double.infinity,
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(
-                        width: 10,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 20,
-                      itemBuilder: (context, index) => Container(
-                        width: 240,
-                        height: 140,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: const Color(0xffE5E5E5))),
-                        child: Row(
-                          children: [
-                            const Column(
-                              children: [
-                                Icon(
-                                  Icons.favorite_outlined,
-                                  color: Colors.red,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    "دونتس شيكولاته",
-                                    style: GoogleFonts.inter(
-                                      color: const Color(0xff65451F),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  "20 LE",
-                                  style: GoogleFonts.inter(
-                                    color: const Color(0xff65451F),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Image.asset("assets/images/Rectangle 29.png"),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
