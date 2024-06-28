@@ -1,5 +1,7 @@
 import 'dart:ffi';
 
+import 'package:magic_bakery/database/model/section_ingredients.dart';
+
 class AddProductModel {
   // data class
   static const String collectionName = 'Products';
@@ -9,12 +11,16 @@ class AddProductModel {
   String? des;
   String? imageUrl;
 
-  AddProductModel(
-      {this.id,
-      this.productName,
-      this.price,
-      this.des,
-      this.imageUrl,});
+  // List? ingredients;
+
+  AddProductModel({
+    this.id,
+    this.productName,
+    this.price,
+    this.des,
+    this.imageUrl,
+    // this.ingredients,
+  });
 
   AddProductModel.fromFireStore(Map<String, dynamic>? data)
       : this(
@@ -23,6 +29,9 @@ class AddProductModel {
           price: data?['price'],
           des: data?['des'],
           imageUrl: data?['imageUrl'],
+          // ingredients: (data?["cartItems"] as List<dynamic>)
+          //     .map((item) => SectionsIngredientModel.fromFireStore(item))
+          //     .toList(),
         );
 
   Map<String, dynamic> toFireStore() {
@@ -32,6 +41,7 @@ class AddProductModel {
       'price': price,
       'des': des,
       'imageUrl': imageUrl,
+      // 'ingredients': ingredients?.map((item) => item.toFireStore()).toList(),
     };
   }
 }

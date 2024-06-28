@@ -143,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     DialogUtils.showLoadingDialog(context, 'Loading...');
     try {
       var result = await authService.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-      var myUser = MyUser.User(
+      var myUser = MyUser.UserModel(
         name: nameController.text,
         email: emailController.text,
         id: result.user?.uid,

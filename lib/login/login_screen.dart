@@ -1,3 +1,4 @@
+import 'package:magic_bakery/admin/admin.dart';
 import 'package:magic_bakery/all_import.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,8 +11,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var formKey = GlobalKey<FormState>();
 
-  var emailController = TextEditingController(text: "");
-  var passwordController = TextEditingController(text: "");
+  var emailController = TextEditingController(text: "m@gmail.com");
+  var passwordController = TextEditingController(text: "000000");
 
   @override
   Widget build(BuildContext context) {
@@ -138,11 +139,11 @@ class _LoginPageState extends State<LoginPage> {
       DialogUtils.showMessage(context, errorMessage, posActionName: 'ok');
     } catch (e) {
       DialogUtils.hideDialog(context);
-      String errorMessage = '$e';
+      String errorMessage = 'Something went wrong';
       DialogUtils.showMessage(context, errorMessage,
           posActionName: 'cancel', negActionName: 'Try Again', negAction: () {
-        Login();
-      });
+            Login();
+          });
     }
   }
 }

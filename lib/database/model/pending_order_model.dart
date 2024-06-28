@@ -6,13 +6,24 @@ class PendingOrderModel {
   String? id;
   String? productName;
   double? price;
+  double? totalPrice;
   String? imageUrl;
+  int? quantity ;
+
 
   PendingOrderModel(
-      {this.id,
+      {
+        this.id,
         this.productName,
         this.price,
-        this.imageUrl,});
+        this.imageUrl,
+        this.quantity,
+        this.totalPrice,
+
+      }
+
+
+);
 
   PendingOrderModel.fromFireStore(Map<String, dynamic>? data)
       : this(
@@ -20,6 +31,8 @@ class PendingOrderModel {
     productName: data?['productName'],
     price: data?['price'],
     imageUrl: data?['imageUrl'],
+    quantity: data?['quantity'],
+    totalPrice: data?['totalPrice']
   );
 
   Map<String, dynamic> toFireStore() {
@@ -28,6 +41,8 @@ class PendingOrderModel {
       'productName': productName,
       'price': price,
       'imageUrl': imageUrl,
+      "quantity":quantity,
+      "totalPrice":totalPrice,
     };
   }
 }

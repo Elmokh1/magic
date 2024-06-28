@@ -1,12 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:magic_bakery/database/model/add_product.dart';
+import 'package:magic_bakery/database/model/favorite_product.dart';
 
 import '../../../../all_import.dart';
 
-class ProductView extends StatelessWidget {
+class ProductView extends StatefulWidget {
   final AddProductModel addProductModel;
+  bool isVisible;
+  ProductView({required this.addProductModel,required this.isVisible});
 
-  ProductView({required this.addProductModel});
+  @override
+  State<ProductView> createState() => _ProductViewState();
+}
 
+class _ProductViewState extends State<ProductView> {
+  var auth = FirebaseAuth.instance;
+  User? user;
+  bool isFavourite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    user = auth.currentUser;
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,20 +30,71 @@ class ProductView extends StatelessWidget {
       child: SizedBox(
         height: 140,
         child: Directionality(
-          textDirection: TextDirection.rtl,
+          textDirection: TextDirection.ltr,
           child: Container(
             width: 240,
             height: 140,
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff65451F).withOpacity(.6)),
+              border: Border.all(
+                color: const Color(0xff65451F).withOpacity(.6),
+              ),
             ),
             child: Row(
               children: [
-                const Column(
+                Column(
                   children: [
-                    Icon(
-                      Icons.favorite_outlined,
-                      color: Colors.red,
+                    StreamBuilder<QuerySnapshot<FavouriteProductModel>>(
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text(snapshot.error.toString());
+                        }
+
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        var favouriteProductList = snapshot.data?.docs
+                            .map((doc) => doc.data() as FavouriteProductModel)
+                            .toList();
+
+                        bool isProductInFavorites =
+                            favouriteProductList != null &&
+                                favouriteProductList.any((product) =>
+                                    product.productName ==
+                                    widget.addProductModel.productName);
+
+                        return GestureDetector(
+                          onTap: () {
+                            if (isProductInFavorites) {
+                              // Remove from favorites
+                              MyDataBase.deleteFavouriteProduct(
+                                widget.addProductModel.id ?? "",
+                                user?.uid ?? "",
+                              );
+                            } else {
+                              // Add to favorites
+                              addFavourite(!isProductInFavorites);
+                            }
+                          },
+                          child: Visibility(
+                            visible: widget.isVisible,
+                            child: Icon(
+                              isProductInFavorites
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isProductInFavorites
+                                  ? Colors.red
+                                  : Colors.black,
+                            ),
+                          ),
+                        );
+                      },
+                      stream: MyDataBase.getFavouriteProductsRealTimeUpdate(
+                        user?.uid ?? "",
+                      ),
                     ),
                   ],
                 ),
@@ -38,7 +105,7 @@ class ProductView extends StatelessWidget {
                     children: [
                       Center(
                         child: Text(
-                          "${addProductModel.productName}",
+                          "${widget.addProductModel.productName}",
                           style: GoogleFonts.inter(
                             color: const Color(0xff65451F),
                             fontSize: 11,
@@ -47,7 +114,7 @@ class ProductView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "${addProductModel.price}EG",
+                        "${widget.addProductModel.price}EG",
                         style: GoogleFonts.inter(
                           color: const Color(0xff65451F),
                           fontSize: 14,
@@ -61,9 +128,12 @@ class ProductView extends StatelessWidget {
                   flex: 6,
                   child: Container(
                     decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image:
-                                NetworkImage("${addProductModel.imageUrl}"))),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          "${widget.addProductModel.imageUrl}",
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -71,6 +141,25 @@ class ProductView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  addFavourite(bool isFav) {
+    setState(() {
+      isFavourite = isFav;
+    });
+
+    var favouriteProduct = FavouriteProductModel(
+      imageUrl: widget.addProductModel.imageUrl,
+      price: widget.addProductModel.price,
+      productName: widget.addProductModel.productName,
+      isFavourite: isFav,
+      des: widget.addProductModel.des,
+    );
+    MyDataBase.addFavouriteProduct(
+      user?.uid ?? "",
+      favouriteProduct,
+      widget.addProductModel.id ?? "",
     );
   }
 }

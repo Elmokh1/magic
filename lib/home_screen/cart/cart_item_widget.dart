@@ -11,8 +11,8 @@ class CartItemWidget extends StatefulWidget {
 }
 
 class _CartItemWidgetState extends State<CartItemWidget> {
-  int quntaty = 1;
-  double price = 0.0;
+  int quantity = 1;
+  double totalPrice = 0.0;
   var auth = FirebaseAuth.instance;
   User? user;
 
@@ -20,11 +20,15 @@ class _CartItemWidgetState extends State<CartItemWidget> {
   void initState() {
     super.initState();
     user = auth.currentUser;
+    calculateTotalPrice();
+  }
+
+  void calculateTotalPrice() {
+    totalPrice = quantity * (widget.pendingOrderModel.price ?? 0.0);
   }
 
   @override
   Widget build(BuildContext context) {
-    price = quntaty * (widget.pendingOrderModel.price ?? 0.0);
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Directionality(
@@ -33,9 +37,10 @@ class _CartItemWidgetState extends State<CartItemWidget> {
           width: 342,
           height: 140,
           decoration: BoxDecoration(
-              border: Border.all(
-            color: const Color(0xff65451F).withOpacity(.6),
-          )),
+            border: Border.all(
+              color: const Color(0xff65451F).withOpacity(.6),
+            ),
+          ),
           child: Row(
             children: [
               Column(
@@ -44,10 +49,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                     width: 60,
                     height: 62,
                     decoration: BoxDecoration(
-                        image: DecorationImage(
-                      image:
-                          NetworkImage(widget.pendingOrderModel.imageUrl ?? ""),
-                    )),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            widget.pendingOrderModel.imageUrl ?? ""),
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -68,19 +74,27 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                           child: const Icon(Icons.add),
                           onTap: () {
                             setState(() {
-                              quntaty++;
-                              print(quntaty);
+                              quantity++;
+                              calculateTotalPrice();
+                              print(quantity);
+                              setState(() {
+                                editPendingProduct();
+                              });
                             });
                           },
                         ),
-                        Text("$quntaty"),
+                        Text("$quantity"),
                         InkWell(
                           onTap: () {
                             setState(() {
-                              if (quntaty > 1) {
-                                quntaty--;
+                              if (quantity > 1) {
+                                quantity--;
+                                calculateTotalPrice();
+                                setState(() {
+                                  editPendingProduct();
+                                });
                               }
-                              print(quntaty);
+                              print(quantity);
                             });
                           },
                           child: Icon(Icons.remove),
@@ -106,7 +120,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                     children: [
                       const Text(" LE"),
                       Text(
-                        " ${price}" ?? "",
+                        " ${widget.pendingOrderModel.totalPrice}" ?? "",
                         style: const TextStyle(color: Color(0xff65451F)),
                       ),
                     ],
@@ -133,8 +147,19 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     );
   }
 
+  void editPendingProduct() {
+    double newPrice = quantity * (widget.pendingOrderModel.price ?? 0.0);
+    print(quantity);
+    MyDataBase.editPendingOrder(
+        user?.uid ?? "", widget.pendingOrderModel.id ?? "",
+        quantity,
+        newPrice
+    );
+  }
+
   void deleteItem() {
     MyDataBase.deletePendingOrder(
-        widget.pendingOrderModel.id ?? "", user?.uid ?? "INsWswNmAKYr4RacDJyBjUJ939I3");
+        widget.pendingOrderModel.id ?? "", user?.uid ?? "");
   }
 }
+

@@ -18,6 +18,7 @@ class SplashPage2 extends StatelessWidget {
         )),
         child: Column(
           children: [
+            SizedBox(height: 30,),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(
@@ -25,8 +26,8 @@ class SplashPage2 extends StatelessWidget {
                 style: GoogleFonts.mogra(
                   decoration: TextDecoration.none,
                   color: Color(0xff6D4404),
-                  fontSize: 24,
-                  fontWeight: FontWeight.w400,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -37,12 +38,12 @@ class SplashPage2 extends StatelessWidget {
                 style: GoogleFonts.mogra(
                   decoration: TextDecoration.none,
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 30,
                   fontWeight: FontWeight.w400,
                 ),
               ),
             ),
-            SizedBox(height: 150,),
+            SizedBox(height: 50,),
             Center(
               child: CustomContainer(
                 ontap:(){

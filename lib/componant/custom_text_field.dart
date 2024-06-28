@@ -9,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   bool isPassword;
   int lines;
   String ContainerName;
+  TextInputType keyboardType;
   CustomTextFormField({
     required this.Label,
     this.isPassword = false,
@@ -16,6 +17,8 @@ class CustomTextFormField extends StatelessWidget {
     required this.validator,
     required this.ContainerName,
     this.lines = 1,
+    this.keyboardType = TextInputType.text,
+
   });
 
   @override
@@ -47,6 +50,7 @@ class CustomTextFormField extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: TextFormField(
+                keyboardType:keyboardType,
                 maxLines: lines,
                 minLines: lines,
                 obscureText: isPassword,

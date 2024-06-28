@@ -1,6 +1,10 @@
 import 'package:magic_bakery/admin/product/add_product.dart';
+import 'package:magic_bakery/admin/product/edit_product/edit_product.dart';
+import 'package:magic_bakery/admin/recipe/recipes.dart';
 import 'package:magic_bakery/admin/sections%20/add_sections.dart';
 import 'package:magic_bakery/all_import.dart';
+
+import 'order/show_orders_page.dart';
 
 class Admin extends StatefulWidget {
   static const String routeName = "Admin";
@@ -74,7 +78,11 @@ class _AdminState extends State<Admin> {
 
             InkWell(
               onTap: () {
-                showAddSectionSheet();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProductPage(),
+                    ));
               },
               child: Container(
                 width: 342,
@@ -91,10 +99,9 @@ class _AdminState extends State<Admin> {
               ),
             ),
             // SizedBox(height: 20,),
-
             InkWell(
               onTap: () {
-                showAddSectionSheet();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SalesScreen(),));
               },
               child: Container(
                 width: 342,
@@ -105,6 +112,24 @@ class _AdminState extends State<Admin> {
                 child: Center(
                   child: Text(
                     "الطلبات ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AddRecipes(),));
+              },
+              child: Container(
+                width: 342,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Color(0xffF4DFBA),
+                ),
+                child: Center(
+                  child: Text(
+                    "اضافة وصفة ",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),

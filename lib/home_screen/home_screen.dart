@@ -1,8 +1,11 @@
 import 'package:magic_bakery/all_import.dart';
 import 'package:magic_bakery/home_screen/cart/cart.dart';
 import 'package:magic_bakery/home_screen/favourite/favourite.dart';
+import 'package:magic_bakery/home_screen/favourite/favourite_page.dart';
+import 'package:magic_bakery/home_screen/recipes_view/recipes_view.dart';
 import 'package:magic_bakery/home_screen/sections/sections.dart';
-import 'package:magic_bakery/home_screen/settings/settings.dart';
+
+import 'ai_chat_bot/chat_page.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "HomeScreen";
@@ -49,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
               label: ''),
           BottomNavigationBarItem(
               icon: Icon(
-                Icons.person,
+                Icons.restaurant_rounded,
                 size: 30,
               ),
               label: ''),
@@ -60,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var tabs = [
     Sections(),
-    Favourite(),
+    FavouritePage(),
     Cart(),
-    Settings(),
+    RecipesView(),
   ];
 }

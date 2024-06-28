@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:magic_bakery/admin/product/add_ingredient_to_product.dart';
 import 'package:magic_bakery/all_import.dart';
 import 'package:magic_bakery/database/model/add_product.dart';
 import 'package:magic_bakery/database/model/secttions_model.dart';
 
+import '../../database/model/section_ingredients.dart';
 import '../../database/model/user_model.dart';
 
 class AddProduct extends StatefulWidget {
@@ -19,10 +20,12 @@ class _AddSectionsState extends State<AddProduct> {
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
-  ImagePicker imagePicker = ImagePicker();
   String? selectedSection;
   String? selectedSectionId;
   var formKey = GlobalKey<FormState>();
+  ImagePicker imagePicker = ImagePicker();
+  String? imageUrl;
+  bool loading = false;
 
   // var auth = FirebaseAuth.instance;
   // User? user;
@@ -32,9 +35,7 @@ class _AddSectionsState extends State<AddProduct> {
   //   super.initState();
   //   user = auth.currentUser;
   // }
-
-  String? imageUrl;
-  bool loading = false;
+  List<SectionsIngredientModel> allSectionsIngredient = [];
 
   @override
   Widget build(BuildContext context) {
@@ -243,7 +244,7 @@ class _AddSectionsState extends State<AddProduct> {
                             'اضافه ',
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           )),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -271,13 +272,17 @@ class _AddSectionsState extends State<AddProduct> {
     );
 
     DialogUtils.hideDialog(context);
-    Fluttertoast.showToast(
-        msg: "Product Added Successfully",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0);
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("تم الاضافه بنجاح")),
+    );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddIngredientToProduct(
+            secId: selectedSectionId??"",
+            addProductModel:addProductModel,
+          ),
+        ));
   }
 }
