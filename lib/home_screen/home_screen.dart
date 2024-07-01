@@ -5,7 +5,6 @@ import 'package:magic_bakery/home_screen/favourite/favourite_page.dart';
 import 'package:magic_bakery/home_screen/recipes_view/recipes_view.dart';
 import 'package:magic_bakery/home_screen/sections/sections.dart';
 
-import 'ai_chat_bot/chat_page.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "HomeScreen";
