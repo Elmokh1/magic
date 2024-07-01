@@ -1,6 +1,5 @@
 import 'package:magic_bakery/all_import.dart';
 import 'package:magic_bakery/home_screen/cart/cart.dart';
-import 'package:magic_bakery/home_screen/favourite/favourite.dart';
 import 'package:magic_bakery/home_screen/favourite/favourite_page.dart';
 import 'package:magic_bakery/home_screen/recipes_view/recipes_view.dart';
 import 'package:magic_bakery/home_screen/sections/sections.dart';
