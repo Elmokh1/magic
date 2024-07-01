@@ -1,6 +1,6 @@
 import 'package:magic_bakery/database/model/add_product.dart';
-
-import '../../../../all_import.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProductViewInSection extends StatelessWidget {
   final AddProductModel addProductModel;
@@ -28,10 +28,11 @@ class ProductViewInSection extends StatelessWidget {
                   flex: 6,
                   child: Container(
                     decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image:
-                                NetworkImage("${addProductModel.imageUrl}"))),
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage("${addProductModel.imageUrl}"),
+                      ),
+                    ),
                   ),
                 ),
                 Expanded(
@@ -39,40 +40,47 @@ class ProductViewInSection extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0,top: 5),
-                            child: Text(
-                              "${addProductModel.productName}",
-                              style: GoogleFonts.inter(
-                                color: const Color(0xff65451F),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
+                      Expanded(
+                        flex: 8,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0, top: 5),
+                              child: Text(
+                                "${addProductModel.productName}",
+                                style: GoogleFonts.inter(
+                                  color: const Color(0xff65451F),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6.0),
-                            child: Text(
-                              "${addProductModel.price}EG",
-                              style: GoogleFonts.inter(
-                                color: const Color(0xff65451F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6.0),
+                              child: Text(
+                                "${addProductModel.price}EG",
+                                style: GoogleFonts.inter(
+                                  color: const Color(0xff65451F),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Icon(
-                          Icons.shopping_cart,
-                          color: Color(0xff65451F),
+                          ],
                         ),
-                      )
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Icon(
+                            Icons.shopping_cart,
+                            color: Color(0xff65451F),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

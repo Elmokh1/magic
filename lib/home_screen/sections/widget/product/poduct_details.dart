@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:magic_bakery/database/model/add_product.dart';
 import 'package:magic_bakery/database/model/pending_order_model.dart';
 
@@ -126,7 +127,7 @@ class _ProductDetailsState extends State<ProductDetails>
             ),
             InkWell(
               onTap: () {
-                Order();
+                addNotes();
               },
               child: Container(
                 width: 240,
@@ -188,4 +189,62 @@ class _ProductDetailsState extends State<ProductDetails>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("تم الاضافه بنجاح")),
     );  }
+  void addNotes() async
+  {
+    TextEditingController noteController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(height: 10,),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: TextFormField(
+                  minLines: 4,
+                  maxLines: 15,
+                  controller: noteController,
+                  decoration: InputDecoration(
+                    hintText: 'اكتب تعليقك هنا',
+                    border: OutlineInputBorder(),
+                    alignLabelWithHint: true, // لمحاذاة النص مع الحقل عند التوسيع
+                    contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0), // تباعد النص داخل الحقل
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  String noteText = noteController.text;
+                  if (noteText.isNotEmpty) {
+                    PendingOrderModel pendingProduct = PendingOrderModel(
+                      productName: widget.addProductModel.productName,
+                      price: widget.addProductModel.price,
+                      imageUrl: widget.addProductModel.imageUrl,
+                      totalPrice: widget.addProductModel.price ?? 0 * 1,
+                      quantity: 1,
+                      note: noteText,
+                    );
+                    MyDataBase.addPendingOrder(user?.uid ?? "", pendingProduct);
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("تم الحفظ بنجاح"),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text('إرسال'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+  }
 }

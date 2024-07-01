@@ -37,27 +37,28 @@ class _SurveyPage2State extends State<SurveyPage2> {
     bool isEsophagitis = false;
     bool isNoEsophagitis = false;
 
-    void choseIllness(){
-      if(isThirst == true ){
+    void choseIllness() {
+      if (isThirst == true) {
         print("مرض السكر");
-      }else if (isShortBreath == true) {
+      } else if (isShortBreath == true) {
         print("مرض القلب");
-      }else if (isDifficultyBreathing == true) {
+      } else if (isDifficultyBreathing == true) {
         print("مرض الضغط");
-      }else if (isSkinRash == true) {
+      } else if (isSkinRash == true) {
         print("مرض حساسة الجلوتين");
-      }else if (isColic == true) {
+      } else if (isColic == true) {
         print("حساسية اللاكتوز");
-      }else if (isUnnaturalSmell == true) {
+      } else if (isUnnaturalSmell == true) {
         print("مرض تمثبل غذائى");
-      }else if (isIrritableBowelSyndrome == true) {
+      } else if (isIrritableBowelSyndrome == true) {
         print("مرض قولون عصبى");
-      }else if (isIndigestion == true) {
+      } else if (isIndigestion == true) {
         print("مرض عسر الهضم");
-      }else if (isEsophagitis == true) {
+      } else if (isEsophagitis == true) {
         print("مرض التهاب المريء");
       }
     }
+
     return SafeArea(
       child: Container(
         color: Colors.white,
@@ -153,7 +154,8 @@ class _SurveyPage2State extends State<SurveyPage2> {
                 ),
                 //مرض القلب
                 Questions(
-                  questionsText: "ألم في العنق أو الفك أو الحلق أو الجزء العلوي من البطن أو الظهر؟",
+                  questionsText:
+                      "ألم في العنق أو الفك أو الحلق أو الجزء العلوي من البطن أو الظهر؟",
                   checkQuestionTrue: isShortBreath,
                   checkQuestionFalse: isNoShortBreath,
                   onTrueTap: () {
@@ -170,7 +172,8 @@ class _SurveyPage2State extends State<SurveyPage2> {
                 ),
                 //القلب
                 Questions(
-                  questionsText: "ألم أو خدر أو ضعف أو برودة في الساقين أو الذراعين إذا أصيبت الأوعية الدموية في أجزاء الجسم هذه بالتضيّق ؟",
+                  questionsText:
+                      "ألم أو خدر أو ضعف أو برودة في الساقين أو الذراعين إذا أصيبت الأوعية الدموية في أجزاء الجسم هذه بالتضيّق ؟",
                   checkQuestionTrue: isShortBreath,
                   checkQuestionFalse: isNoShortBreath,
                   onTrueTap: () {
@@ -306,7 +309,8 @@ class _SurveyPage2State extends State<SurveyPage2> {
                 ),
                 //تمثيل غذائى
                 Questions(
-                  questionsText: "هل لديك تأخر فى النمو،اوتشعر بالخمول،و ضعف الشهية؟",
+                  questionsText:
+                      "هل لديك تأخر فى النمو،اوتشعر بالخمول،و ضعف الشهية؟",
                   checkQuestionTrue: isUnnaturalSmell,
                   checkQuestionFalse: isNoUnnaturalSmell,
                   onTrueTap: () {
@@ -357,7 +361,8 @@ class _SurveyPage2State extends State<SurveyPage2> {
                 ),
                 //قولون عصبى
                 Questions(
-                  questionsText: "هل تشعر وجع قليل أو مبهم أو تقلُّصات مؤلمة في أسفل البطن",
+                  questionsText:
+                      "هل تشعر وجع قليل أو مبهم أو تقلُّصات مؤلمة في أسفل البطن",
                   checkQuestionTrue: isIrritableBowelSyndrome,
                   checkQuestionFalse: isNoIrritableBowelSyndrome,
                   onTrueTap: () {
@@ -427,7 +432,7 @@ class _SurveyPage2State extends State<SurveyPage2> {
                 //اعراض التهاب المريء
                 Questions(
                   questionsText:
-                  "هل تشعر بألم فى الصدر عند الأكل، خاصةً خلف عظمة القص.؟",
+                      "هل تشعر بألم فى الصدر عند الأكل، خاصةً خلف عظمة القص.؟",
                   checkQuestionTrue: isEsophagitis,
                   checkQuestionFalse: isNoEsophagitis,
                   onTrueTap: () {
@@ -443,7 +448,7 @@ class _SurveyPage2State extends State<SurveyPage2> {
                   height: 15,
                 ),
                 GestureDetector(
-                  onTap: ()=>choseIllness(),
+                  onTap: () => choseIllness(),
                   child: Container(
                     width: 200,
                     height: 40,
@@ -468,4 +473,3 @@ class _SurveyPage2State extends State<SurveyPage2> {
     );
   }
 }
-

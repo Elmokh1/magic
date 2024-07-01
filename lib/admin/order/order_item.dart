@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:magic_bakery/admin/admin.dart';
 import 'package:magic_bakery/database/model/Admin_Orders_Model.dart';
 import 'package:magic_bakery/database/model/review_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../MyDateUtils.dart';
 import '../../all_import.dart';
@@ -30,19 +32,16 @@ class _OrderItemState extends State<OrderItemForAdmin> {
       children: [
         const Divider(),
         Container(
-          // padding: EdgeInsets.symmetric(vertical: 10),
           margin: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color: Colors.white,
-            // Background color
             borderRadius: BorderRadius.circular(12.0),
-            // Adjust the value to control the roundness
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5), // Shadow color
-                spreadRadius: 2, // Spread radius
-                blurRadius: 5, // Blur radius
-                offset: const Offset(0, 2), // Offset
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
@@ -57,7 +56,7 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20),
-                    ), // Adjust the value to control the roundness
+                    ),
                   ),
                   child: Center(
                     child: Column(
@@ -72,7 +71,6 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasError) {
                                     print(snapshot.error);
-
                                     return Text("Error: ");
                                   }
                                   if (snapshot.connectionState ==
@@ -106,9 +104,6 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                                       child: ListView.builder(
                                         itemBuilder: (context, index) {
                                           final order = OrdersList[index];
-                                          // if (order.accept == true){
-                                          //   return SizedBox.shrink();
-                                          // }
                                           print(order.review);
                                           return InkWell(
                                             onTap: () {
@@ -118,7 +113,7 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                                                   return AlertDialog(
                                                     title: Center(
                                                         child:
-                                                            Text(' التعليق')),
+                                                        Text('التعليق')),
                                                     content: Center(
                                                         child: Text(
                                                             order.review ??
@@ -127,7 +122,7 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                                                       TextButton(
                                                         onPressed: () {
                                                           Navigator.of(context)
-                                                              .pop(); // لإغلاق الـ AlertDialog
+                                                              .pop();
                                                         },
                                                         child: Text('إغلاق'),
                                                       ),
@@ -231,21 +226,34 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                 for (var cartItem in widget.orderModel.cartItems ?? [])
                   Padding(
                     padding:
-                        const EdgeInsets.only(top: 20.0, left: 20, bottom: 8),
+                    const EdgeInsets.only(top: 20.0, left: 20, bottom: 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Expanded(
-                            child: Text("${cartItem.productName ?? 'N/A'}")),
+                        cartItem.note != null
+                            ? Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              showNote(context, cartItem.note!);
+                            },
+                            child: Text(
+                              "${cartItem.productName ?? 'N/A'}",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        )
+                            : Expanded(
+                            child:
+                            Text("${cartItem.productName ?? 'N/A'}")),
                         Expanded(
                             flex: 2,
                             child: Center(
                                 child: Column(
-                              children: [
-                                Text(
-                                    " ${cartItem.quantity?.toString() ?? 'empty'}"),
-                              ],
-                            ))),
+                                  children: [
+                                    Text(
+                                        " ${cartItem.quantity?.toString() ?? 'empty'}"),
+                                  ],
+                                ))),
                         Expanded(
                           child: Row(
                             children: [
@@ -275,7 +283,7 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
-                    ), // Adjust the value to control the roundness
+                    ),
                   ),
                   child: Center(
                     child: Text(
@@ -348,7 +356,6 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                             )),
                         onTap: () {
                           setState(() {
-                            // if (widget.orderModel.state == false) {
                             widget.orderModel.state = false;
                             widget.orderModel.accept = false;
                             widget.orderModel.isDelivery = false;
@@ -382,8 +389,7 @@ class _OrderItemState extends State<OrderItemForAdmin> {
                       ),
                     if (!widget.orderModel.isDelivery &&
                         !widget.orderModel.state &&
-                        !widget.orderModel.accept
-                    )
+                        !widget.orderModel.accept)
                       Text(
                         "تم الرفض",
                         style: GoogleFonts.cairo(
@@ -401,6 +407,26 @@ class _OrderItemState extends State<OrderItemForAdmin> {
           ),
         ),
       ],
+    );
+  }
+
+  void showNote(BuildContext context, String note) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(child: Text('ملاحظة')),
+          content: Center(child: Text(note)),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('إغلاق'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

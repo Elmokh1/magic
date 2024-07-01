@@ -45,8 +45,8 @@ class _MyAppState extends State<MyApp> {
         HeartPage.routeName: (context) => HeartPage(),
         HeartReadHistoryPage.routeName: (context) => HeartReadHistoryPage(),
       },
-      initialRoute: user != null ? HomeScreen.routeName : SplashPage.routeName,
-      // initialRoute: Admin.routeName,
+      // initialRoute: user != null ? HomeScreen.routeName : SplashPage.routeName,
+      initialRoute: Admin.routeName,
     );
   }
 }
