@@ -136,6 +136,18 @@ class _SectionsState extends State<Sections> {
           padding: EdgeInsets.all(20.0),
           child: Column(
             children: [
+              // InkWell(
+              //   child: SectionReview(sections: ),
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => SectionAllProduct(sectionsModel: ),
+              //       ),
+              //     );
+              //   },
+              // ),
+
               Expanded(
                 child: StreamBuilder<QuerySnapshot<SectionsModel>>(
                   builder: (context, snapshot) {
@@ -223,8 +235,7 @@ class _SectionsState extends State<Sections> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     ProductDetails(
-                                                        addProductModel:
-                                                            product),
+                                                        addProductModel: product),
                                               ),
                                             );
                                           },

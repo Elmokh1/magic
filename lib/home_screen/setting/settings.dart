@@ -107,11 +107,9 @@ class _SettingState extends State<Setting> {
                     photoAdded = true;
                   });
                 },
-                child:
-                loading
+                child: loading
                     ? const CircularProgressIndicator()
-                    :
-                imageUrl == null&& widget.photo.trim().isEmpty
+                    : imageUrl == null && widget.photo.trim().isEmpty
                         ? CircleAvatar(
                             backgroundColor: Colors.black,
                             radius: 40,
@@ -292,9 +290,12 @@ class _SettingState extends State<Setting> {
               height: 30,
             ),
             InkWell(
-              onTap: (){
-
-                Navigator.push(context, MaterialPageRoute(builder: (context) => UserSalesScreen(),));
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserSalesScreen(),
+                    ));
               },
               child: Container(
                 width: 342,
@@ -310,51 +311,21 @@ class _SettingState extends State<Setting> {
                   textDirection: TextDirection.rtl,
                   child: Row(
                     children: [
-                      SizedBox(width: 20,),
-
-                      Icon(Icons.history,),
-                      SizedBox(width: 10,),
-                      Text("السجل ",style: TextStyle(
-                        fontSize: 20,
-                      ),)
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, HeartPage.routeName);
-              },
-              child: Container(
-                height: 48,
-                width: 342,
-                decoration: BoxDecoration(
-                  color: Color(0xff65451F),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Icon(
+                        Icons.history,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text(
-                        "  ❤️ ",
+                        "السجل ",
                         style: TextStyle(
-                          fontSize: 30
-                        ),
-                      ),
-
-                      Text(
-                        "قياس النبض",
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),

@@ -44,6 +44,8 @@ dependencies:
   flutter_glow: ^0.3.0
   table_calendar: ^3.0.9
   heart_bpm:
+  firebase_messaging:
+  http:
 
 
 

@@ -33,6 +33,7 @@ class _QuestionsState extends State<Questions> {
           color: const Color(0xffF5F5F5),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               widget.questionsText,

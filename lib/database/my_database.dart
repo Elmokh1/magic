@@ -52,6 +52,13 @@ class MyDataBase {
 
     return getUserCollection().doc(uId).update(userData);
   }
+  static Future<void> editUserForSurvey(String uId,  String illNum) {
+    Map<String, dynamic> userData = {
+      'illnessNum': illNum,
+    };
+
+    return getUserCollection().doc(uId).update(userData);
+  }
 
   static Future<UserModel?> readUser(String id) async {
     var collection = getUserCollection();

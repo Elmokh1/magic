@@ -2,9 +2,13 @@ import 'package:magic_bakery/all_import.dart';
 import 'package:magic_bakery/database/model/pending_order_model.dart';
 
 class CartItemWidget extends StatefulWidget {
-  PendingOrderModel pendingOrderModel;
+  final PendingOrderModel pendingOrderModel;
+  final VoidCallback onQuantityChanged;
 
-  CartItemWidget({required this.pendingOrderModel});
+  CartItemWidget({
+    required this.pendingOrderModel,
+    required this.onQuantityChanged,
+  });
 
   @override
   State<CartItemWidget> createState() => _CartItemWidgetState();
@@ -13,13 +17,14 @@ class CartItemWidget extends StatefulWidget {
 class _CartItemWidgetState extends State<CartItemWidget> {
   int quantity = 1;
   double totalPrice = 0.0;
-  var auth = FirebaseAuth.instance;
+  final auth = FirebaseAuth.instance;
   User? user;
 
   @override
   void initState() {
     super.initState();
     user = auth.currentUser;
+    quantity = widget.pendingOrderModel.quantity ?? 1;
     calculateTotalPrice();
   }
 
@@ -50,14 +55,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                     height: 62,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(
-                            widget.pendingOrderModel.imageUrl ?? ""),
+                        image: NetworkImage(widget.pendingOrderModel.imageUrl ?? ""),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Container(
                     width: 108,
                     height: 35,
@@ -75,12 +77,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                           onTap: () {
                             setState(() {
                               quantity++;
+                              widget.pendingOrderModel.quantity = quantity;
                               calculateTotalPrice();
-                              print(quantity);
-                              setState(() {
-                                editPendingProduct();
-                              });
+                              editPendingProduct();
                             });
+                            widget.onQuantityChanged(); // Notify parent
                           },
                         ),
                         Text("$quantity"),
@@ -89,13 +90,12 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                             setState(() {
                               if (quantity > 1) {
                                 quantity--;
+                                widget.pendingOrderModel.quantity = quantity;
                                 calculateTotalPrice();
-                                setState(() {
-                                  editPendingProduct();
-                                });
+                                editPendingProduct();
                               }
-                              print(quantity);
                             });
+                            widget.onQuantityChanged(); // Notify parent
                           },
                           child: Icon(Icons.remove),
                         ),
@@ -106,21 +106,17 @@ class _CartItemWidgetState extends State<CartItemWidget> {
               ),
               Column(
                 children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   Text(
                     widget.pendingOrderModel.productName ?? "",
                     style: const TextStyle(color: Color(0xff65451F)),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
+                  const SizedBox(height: 40),
                   Row(
                     children: [
                       const Text(" LE"),
                       Text(
-                        " ${widget.pendingOrderModel.totalPrice}" ?? "",
+                        " ${widget.pendingOrderModel.totalPrice ?? ''}",
                         style: const TextStyle(color: Color(0xff65451F)),
                       ),
                     ],
@@ -137,9 +133,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   color: Colors.grey,
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
             ],
           ),
         ),
@@ -149,17 +143,15 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 
   void editPendingProduct() {
     double newPrice = quantity * (widget.pendingOrderModel.price ?? 0.0);
-    print(quantity);
     MyDataBase.editPendingOrder(
-        user?.uid ?? "", widget.pendingOrderModel.id ?? "",
+        user?.uid ?? "",
+        widget.pendingOrderModel.id ?? "",
         quantity,
         newPrice
     );
   }
 
   void deleteItem() {
-    MyDataBase.deletePendingOrder(
-        widget.pendingOrderModel.id ?? "", user?.uid ?? "");
+    MyDataBase.deletePendingOrder(widget.pendingOrderModel.id ?? "", user?.uid ?? "");
   }
 }
-

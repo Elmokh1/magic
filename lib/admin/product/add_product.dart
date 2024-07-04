@@ -10,6 +10,7 @@ import 'package:magic_bakery/database/model/secttions_model.dart';
 
 import '../../database/model/section_ingredients.dart';
 import '../../database/model/user_model.dart';
+import '../../notifications/firebase_notifications.dart';
 
 class AddProduct extends StatefulWidget {
   @override
@@ -271,18 +272,26 @@ class _AddSectionsState extends State<AddProduct> {
       addProductModel,
     );
 
+    // // إرسال الإشعار بأن المنتج تم إضافته
+    // FirebaseNotifications().sendNotification(
+    //   'منتج جديد تم إضافته',
+    //   'تم إضافة ${addProductModel.productName}',
+    //   addProductModel.imageUrl ?? '', // يمكنك تعيين صورة إذا كانت متاحة
+    // );
+
     DialogUtils.hideDialog(context);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("تم الاضافه بنجاح")),
     );
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddIngredientToProduct(
-            secId: selectedSectionId??"",
-            addProductModel:addProductModel,
-          ),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddIngredientToProduct(
+          secId: selectedSectionId ?? "",
+          addProductModel: addProductModel,
+        ),
+      ),
+    );
   }
 }

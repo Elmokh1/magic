@@ -133,7 +133,7 @@ class _UserOrderItemState extends State<UserOrderItem> {
                               widget.orderModel.state == true &&
                               widget.orderModel.accept == false) {
                             return const Text(
-                              "لسه شويه",
+                              "قيد التنفيذ",
                               style: TextStyle(
                                 color: Color(0xff65451F),
                                 fontSize: 30,

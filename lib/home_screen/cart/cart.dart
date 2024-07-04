@@ -1,12 +1,9 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:magic_bakery/check_out/check_out.dart';
 import 'package:magic_bakery/database/model/pending_order_model.dart';
 import 'package:magic_bakery/home_screen/cart/cart_item_widget.dart';
-
-import '../../all_import.dart';
-import '../../database/model/Order_Model.dart';
+import 'package:magic_bakery/all_import.dart';
+import 'package:magic_bakery/database/model/Order_Model.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -17,6 +14,7 @@ class _CartState extends State<Cart> {
   var auth = FirebaseAuth.instance;
   User? user;
   List<PendingOrderModel>? pendingProduct;
+  double total = 0.0; // To store the total amount
 
   @override
   void initState() {
@@ -24,7 +22,12 @@ class _CartState extends State<Cart> {
     user = auth.currentUser;
   }
 
-  double total = 0.0;
+  void calculateTotalAmount() {
+    if (pendingProduct != null) {
+      total = pendingProduct!.fold(
+          0.0, (sum, item) => sum + (item.price ?? 0.0) * (item.quantity ?? 1));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +48,10 @@ class _CartState extends State<Cart> {
                   child: CircularProgressIndicator(),
                 );
               }
-              var pendingProductList =
-                  snapshot.data?.docs.map((doc) => doc.data()).toList();
-              if (pendingProductList?.isEmpty == true) {
+              pendingProduct = snapshot.data?.docs
+                  .map((doc) => doc.data())
+                  .toList();
+              if (pendingProduct?.isEmpty == true) {
                 return Center(
                   child: Text(
                     "لا يوجد منتجات ",
@@ -57,30 +61,27 @@ class _CartState extends State<Cart> {
                   ),
                 );
               }
-              double totalAmount = 0;
-              for (var product in pendingProductList!) {
-                totalAmount +=
-                    (product.totalPrice ?? 0) * (product.quantity ?? 1);
-                total = totalAmount;
-              }
+
+              // Calculate total amount
+              calculateTotalAmount();
+
               return Directionality(
                 textDirection: TextDirection.rtl,
                 child: Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    child: ListView.builder(
-                      itemCount: pendingProductList?.length ?? 0,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        print(totalAmount);
-                        print(total);
-                        total = totalAmount;
-                        final product = pendingProductList![index];
-                        pendingProduct = pendingProductList;
-                        return CartItemWidget(pendingOrderModel: product);
-                      },
-                    ),
+                  child: ListView.builder(
+                    itemCount: pendingProduct?.length ?? 0,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      final product = pendingProduct![index];
+                      return CartItemWidget(
+                        pendingOrderModel: product,
+                        onQuantityChanged: () {
+                          setState(() {
+                            calculateTotalAmount();
+                          });
+                        },
+                      );
+                    },
                   ),
                 ),
               );
@@ -115,7 +116,6 @@ class _CartState extends State<Cart> {
           ),
           InkWell(
             onTap: () {
-              print(pendingProduct?[0].quantity);
               setState(() {
                 Order();
               });
@@ -149,7 +149,7 @@ class _CartState extends State<Cart> {
       customerName: "",
       cartItems: pendingProduct,
       dateTime: DateTime.now(),
-      totalPrice: 0.0,
+      totalPrice: total,
       isDelivery: false,
       state: true,
     );

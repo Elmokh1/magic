@@ -23,7 +23,7 @@ class RecipesViewWidget extends StatelessWidget {
           },
           child: Container(
             width: 160,
-            height: 222,
+            height: 250,
             decoration: BoxDecoration(
               color: Color(0xff65451F).withOpacity(.4),
               borderRadius: BorderRadius.circular(16),

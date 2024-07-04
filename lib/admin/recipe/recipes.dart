@@ -8,6 +8,7 @@ import 'package:magic_bakery/all_import.dart';
 import 'package:magic_bakery/database/model/add_product.dart';
 import 'package:magic_bakery/database/model/add_recipes.dart';
 import 'package:magic_bakery/database/model/secttions_model.dart';
+import 'package:magic_bakery/notifications/firebase_notifications.dart';
 
 import '../../database/model/section_ingredients.dart';
 import '../../database/model/user_model.dart';
@@ -29,14 +30,6 @@ class _AddSectionsState extends State<AddRecipes> {
   String? imageUrl;
   bool loading = false;
 
-  // var auth = FirebaseAuth.instance;
-  // User? user;
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   user = auth.currentUser;
-  // }
   List<SectionsIngredientModel> allSectionsIngredient = [];
 
   @override
@@ -46,14 +39,12 @@ class _AddSectionsState extends State<AddRecipes> {
       child: Scaffold(
         appBar: AppBar(),
         body: Container(
-          // color: Colors.white,
           child: Form(
             key: formKey,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: SingleChildScrollView(
                 child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     InkWell(
                       onTap: () async {
@@ -87,7 +78,7 @@ class _AddSectionsState extends State<AddRecipes> {
                         radius: 80,
                         backgroundColor: Colors.black,
                         child: loading
-                            ? const CircularProgressIndicator() // رمز الانتظار
+                            ? const CircularProgressIndicator()
                             : imageUrl == null
                                 ? const Icon(Icons.image)
                                 : CircleAvatar(
@@ -162,6 +153,11 @@ class _AddSectionsState extends State<AddRecipes> {
     if (formKey.currentState?.validate() == false) {
       return;
     }
+
+    setState(() {
+      loading = true;
+    });
+
     RecipesModel recipesModel = RecipesModel(
       imageUrl: imageUrl,
       recipeName: nameController.text,
@@ -169,9 +165,18 @@ class _AddSectionsState extends State<AddRecipes> {
       ingredients: ingredientsController.text,
     );
 
-    await MyDataBase.addRecipes(
-      recipesModel,
-    );
+    await MyDataBase.addRecipes(recipesModel);
+
+    // // إرسال إشعار باستخدام FirebaseNotifications
+    // await FirebaseNotifications().sendNotification(
+    //   "وصفة جديدة!",
+    //   "تم إضافة وصفة جديدة: ${nameController.text}",
+    //   imageUrl ?? "",
+    // );
+
+    setState(() {
+      loading = false;
+    });
 
     DialogUtils.hideDialog(context);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
