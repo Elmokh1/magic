@@ -172,7 +172,7 @@ class _EditProductPageState extends State<EditProductPage> {
                         return Column(
                           children: [
                             InkWell(
-                              child: SectionReview(sections: section),
+                              child: SectionReview(sectionsName: section.name??""),
                               onTap: () {
                                 Navigator.push(
                                   context,

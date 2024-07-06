@@ -3,9 +3,9 @@ import 'package:magic_bakery/database/model/secttions_model.dart';
 import '../../../../all_import.dart';
 
 class SectionReview extends StatelessWidget {
-  SectionsModel sections;
+  String sectionsName;
 
-  SectionReview({required this.sections});
+  SectionReview({required this.sectionsName});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class SectionReview extends StatelessWidget {
         Spacer(),
         Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text("${sections.name}"),
+          child: Text("${sectionsName}"),
         )
       ],
     );

@@ -21,47 +21,67 @@ class _SurveyPage2State extends State<SurveyPage2> {
   var auth = FirebaseAuth.instance;
   User? user;
 
+  bool isThirst = false;
+  bool isNoThirst = false;
+  bool isWeightLoss = false;
+  bool isNoWeightLoss = false;
+  bool isFrequentUrination = false;
+  bool isNoFrequentUrination = false;
+
+  bool isChestPain = false;
+  bool isNoChestPain = false;
+  bool isSwollenFeet = false;
+  bool isNoSwollenFeet = false;
+  bool isFatigue = false;
+  bool isNoFatigue = false;
+
+  bool isShortBreath = false;
+  bool isNoShortBreath = false;
+  bool isHeadache = false;
+  bool isNoHeadache = false;
+  bool isDizziness = false;
+  bool isNoDizziness = false;
+
+  bool isColic = false;
+  bool isNoColic = false;
+  bool isDiarrhea = false;
+  bool isNoDiarrhea = false;
+  bool isBloating = false;
+  bool isNoBloating = false;
+  bool isNausea = false;
+  bool isNoNausea = false;
+
   @override
   void initState() {
     super.initState();
     user = auth.currentUser;
   }
 
+  void choseIllness() {
+    if (isThirst && isWeightLoss && isFrequentUrination) {
+      print("مرض السكر");
+      index = 1;
+      MyDataBase.editUserForSurvey(user?.uid ?? "", "AA7FQcACPxBR7eKQQqGA");
+    } else if (isChestPain && isSwollenFeet && isFatigue) {
+      print("مرض القلب");
+      index = 2;
+      MyDataBase.editUserForSurvey(user?.uid ?? "", "qqTAxEx0vZTcxX26tuoL");
+    } else if (isShortBreath && isHeadache && isDizziness) {
+      print("مرض الضغط");
+      index = 3;
+      MyDataBase.editUserForSurvey(user?.uid ?? "", "UlT4kxFNs6McaImvEDA8");
+    } else if (isColic && isDiarrhea && isBloating && isNausea) {
+      print("حساسية اللاكتوز");
+      index = 4;
+      MyDataBase.editUserForSurvey(user?.uid ?? "", "6ApcmtXOdyAicloxuh2L");
+    } else {
+      print("المرض غير معروف");
+      MyDataBase.editUserForSurvey(user?.uid ?? "", "UlT4kxFNs6McaImvEDA8");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isThirst = false;
-    bool isNoThirst = false;
-    bool isShortBreath = false;
-    bool isNoShortBreath = false;
-    bool isDifficultyBreathing = false;
-    bool isNoDifficultyBreathing = false;
-    bool isColic = false;
-    bool isNoColic = false;
-
-    void choseIllness() {
-      if (isThirst == true && isNoThirst == false) {
-        print("مرض السكر");
-        index = 1;
-        MyDataBase.editUserForSurvey(user?.uid ?? "", "1");
-      } else if (isShortBreath == true && isNoShortBreath == false) {
-        print("مرض القلب");
-        index = 2;
-        MyDataBase.editUserForSurvey(user?.uid ?? "", "2");
-      } else if (isDifficultyBreathing == true &&
-          isNoDifficultyBreathing == false) {
-        print("مرض الضغط");
-        index = 3;
-        MyDataBase.editUserForSurvey(user?.uid ?? "", "3");
-      } else if (isColic == true && isNoColic == false) {
-        print("حساسية اللاكتوز");
-        index = 4;
-        MyDataBase.editUserForSurvey(user?.uid ?? "", "4");
-      } else {
-        print("المرض غير معروف");
-        MyDataBase.editUserForSurvey(user?.uid ?? "", "0");
-      }
-    }
-
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -113,87 +133,63 @@ class _SurveyPage2State extends State<SurveyPage2> {
                     ),
                   ),
 
-                  //مرض السكر
+                  // مرض السكر
                   Questions(
                     questionsText: "هل تشعر بالعطش اكثر من اللازم؟",
                     checkQuestionTrue: isThirst,
                     checkQuestionFalse: isNoThirst,
                     onTrueTap: () {
-                      isNoThirst = false;
-                      isThirst = true;
+                      setState(() {
+                        isThirst = true;
+                        isNoThirst = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoThirst = true;
-                      isThirst = false;
+                      setState(() {
+                        isThirst = false;
+                        isNoThirst = true;
+                      });
                     },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  //سكر
                   Questions(
-                    questionsText: "هل تفقدان الوزن من دون قصد؟",
-                    checkQuestionTrue: isThirst,
-                    checkQuestionFalse: isNoThirst,
+                    questionsText: "هل تفقد الوزن من دون قصد؟",
+                    checkQuestionTrue: isWeightLoss,
+                    checkQuestionFalse: isNoWeightLoss,
                     onTrueTap: () {
-                      isNoThirst = false;
-                      isThirst = true;
+                      setState(() {
+                        isWeightLoss = true;
+                        isNoWeightLoss = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoThirst = true;
-                      isThirst = false;
+                      setState(() {
+                        isWeightLoss = false;
+                        isNoWeightLoss = true;
+                      });
                     },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  // مرض السكر
                   Questions(
                     questionsText:
-                        "هل تريد التبول بشكل متكرر، وخاصة في الليل ؟",
-                    checkQuestionTrue: isShortBreath,
-                    checkQuestionFalse: isNoShortBreath,
+                    "هل تريد التبول بشكل متكرر، وخاصة في الليل؟",
+                    checkQuestionTrue: isFrequentUrination,
+                    checkQuestionFalse: isNoFrequentUrination,
                     onTrueTap: () {
-                      isNoThirst = false;
-                      isThirst = true;
+                      setState(() {
+                        isFrequentUrination = true;
+                        isNoFrequentUrination = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoThirst = true;
-                      isThirst = false;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  // مرض السكر
-                  Questions(
-                    questionsText: "هل تشعر صعوبة فى التنفس مع دوخان؟",
-                    checkQuestionTrue: isDifficultyBreathing,
-                    checkQuestionFalse: isNoDifficultyBreathing,
-                    onTrueTap: () {
-                      isNoThirst = false;
-                      isThirst = true;
-                    },
-                    onFalseTap: () {
-                      isNoThirst = true;
-                      isThirst = false;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  //السكر
-                  Questions(
-                    questionsText: "هل تشعر بتنميل فى اليدين او القدميين؟",
-                    checkQuestionTrue: isDifficultyBreathing,
-                    checkQuestionFalse: isNoDifficultyBreathing,
-                    onTrueTap: () {
-                      isNoThirst = false;
-                      isThirst = true;
-                    },
-                    onFalseTap: () {
-                      isNoThirst = true;
-                      isThirst = false;
+                      setState(() {
+                        isFrequentUrination = false;
+                        isNoFrequentUrination = true;
+                      });
                     },
                   ),
                   const SizedBox(
@@ -202,168 +198,120 @@ class _SurveyPage2State extends State<SurveyPage2> {
                   // مرض القلب
                   Questions(
                     questionsText: "هل تشعر بألم او ضغط فى الصدر؟",
-                    checkQuestionTrue: isShortBreath,
-                    checkQuestionFalse: isNoShortBreath,
+                    checkQuestionTrue: isChestPain,
+                    checkQuestionFalse: isNoChestPain,
                     onTrueTap: () {
-                      isNoShortBreath = false;
-                      isShortBreath = true;
+                      setState(() {
+                        isChestPain = true;
+                        isNoChestPain = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoShortBreath = true;
-                      isShortBreath = false;
+                      setState(() {
+                        isChestPain = false;
+                        isNoChestPain = true;
+                      });
                     },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  //القلب
+                  Questions(
+                    questionsText: "هل تشعر بتورم فى القدمين او الكاحلين؟",
+                    checkQuestionTrue: isSwollenFeet,
+                    checkQuestionFalse: isNoSwollenFeet,
+                    onTrueTap: () {
+                      setState(() {
+                        isSwollenFeet = true;
+                        isNoSwollenFeet = false;
+                      });
+                    },
+                    onFalseTap: () {
+                      setState(() {
+                        isSwollenFeet = false;
+                        isNoSwollenFeet = true;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Questions(
+                    questionsText: "هل تشعر بالإرهاق والتعب غير المبرر؟",
+                    checkQuestionTrue: isFatigue,
+                    checkQuestionFalse: isNoFatigue,
+                    onTrueTap: () {
+                      setState(() {
+                        isFatigue = true;
+                        isNoFatigue = false;
+                      });
+                    },
+                    onFalseTap: () {
+                      setState(() {
+                        isFatigue = false;
+                        isNoFatigue = true;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  // مرض الضغط
                   Questions(
                     questionsText: "هل تشعر بضيق فى التنفس؟",
                     checkQuestionTrue: isShortBreath,
                     checkQuestionFalse: isNoShortBreath,
                     onTrueTap: () {
-                      isNoShortBreath = false;
-                      isShortBreath = true;
+                      setState(() {
+                        isShortBreath = true;
+                        isNoShortBreath = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoShortBreath = true;
-                      isShortBreath = false;
+                      setState(() {
+                        isShortBreath = false;
+                        isNoShortBreath = true;
+                      });
                     },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  // القلب
                   Questions(
-                    questionsText: "هل تشعر بتورم فى القدمين او الكاحلين؟",
-                    checkQuestionTrue: isShortBreath,
-                    checkQuestionFalse: isNoShortBreath,
+                    questionsText: "هل تشعر بالصداع بشكل متكرر؟",
+                    checkQuestionTrue: isHeadache,
+                    checkQuestionFalse: isNoHeadache,
                     onTrueTap: () {
-                      isNoShortBreath = false;
-                      isShortBreath = true;
+                      setState(() {
+                        isHeadache = true;
+                        isNoHeadache = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoShortBreath = true;
-                      isShortBreath = false;
+                      setState(() {
+                        isHeadache = false;
+                        isNoHeadache = true;
+                      });
                     },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  // القلب
                   Questions(
-                    questionsText: "هل تشعر بالإرهاق والتعب غير المبرر ؟",
-                    checkQuestionTrue: isShortBreath,
-                    checkQuestionFalse: isNoShortBreath,
+                    questionsText: "هل تشعر بدوخة (دوار) بشكل مستمر؟",
+                    checkQuestionTrue: isDizziness,
+                    checkQuestionFalse: isNoDizziness,
                     onTrueTap: () {
-                      isNoShortBreath = false;
-                      isShortBreath = true;
+                      setState(() {
+                        isDizziness = true;
+                        isNoDizziness = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoShortBreath = true;
-                      isShortBreath = false;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  //مرض الضغط
-                  Questions(
-                    questionsText: "هل تشعر بالصداع الشديد؟",
-                    checkQuestionTrue: isDifficultyBreathing,
-                    checkQuestionFalse: isNoDifficultyBreathing,
-                    onTrueTap: () {
-                      isNoDifficultyBreathing = false;
-                      isDifficultyBreathing = true;
-                    },
-                    onFalseTap: () {
-                      isNoDifficultyBreathing = true;
-                      isDifficultyBreathing = false;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  // الضغط
-                  Questions(
-                    questionsText: "هل تشعر بضيق فى التنفس ؟",
-                    checkQuestionTrue: isDifficultyBreathing,
-                    checkQuestionFalse: isNoDifficultyBreathing,
-                    onTrueTap: () {
-                      isNoDifficultyBreathing = false;
-                      isDifficultyBreathing = true;
-                    },
-                    onFalseTap: () {
-                      isNoDifficultyBreathing = true;
-                      isDifficultyBreathing = false;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  //الضغط
-                  Questions(
-                    questionsText: "هل تعانى من مشاكل في الرؤية؟",
-                    checkQuestionTrue: isDifficultyBreathing,
-                    checkQuestionFalse: isNoDifficultyBreathing,
-                    onTrueTap: () {
-                      isNoDifficultyBreathing = false;
-                      isDifficultyBreathing = true;
-                    },
-                    onFalseTap: () {
-                      isNoDifficultyBreathing = true;
-                      isDifficultyBreathing = false;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  //الضغط
-                  Questions(
-                    questionsText: "هل تشعر بنبضات قلب غير منتظمة أو قوية ؟",
-                    checkQuestionTrue: isDifficultyBreathing,
-                    checkQuestionFalse: isNoDifficultyBreathing,
-                    onTrueTap: () {
-                      isNoDifficultyBreathing = false;
-                      isDifficultyBreathing = true;
-                    },
-                    onFalseTap: () {
-                      isNoDifficultyBreathing = true;
-                      isDifficultyBreathing = false;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  //حساسية اللاكتوز
-                  Questions(
-                    questionsText: "هل تشعر بالامتلاء أو الانتفاخ في البطن ؟",
-                    checkQuestionTrue: isColic,
-                    checkQuestionFalse: isNoColic,
-                    onTrueTap: () {
-                      isNoColic = false;
-                      isColic = true;
-                    },
-                    onFalseTap: () {
-                      isNoColic = true;
-                      isColic = false;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  //حساسية اللاكتوز
-                  Questions(
-                    questionsText: "هل تشعر بزيادة في الغازات المعوية؟",
-                    checkQuestionTrue: isColic,
-                    checkQuestionFalse: isNoColic,
-                    onTrueTap: () {
-                      isNoColic = false;
-                      isColic = true;
-                    },
-                    onFalseTap: () {
-                      isNoColic = true;
-                      isColic = false;
+                      setState(() {
+                        isDizziness = false;
+                        isNoDizziness = true;
+                      });
                     },
                   ),
                   const SizedBox(
@@ -371,73 +319,108 @@ class _SurveyPage2State extends State<SurveyPage2> {
                   ),
                   // حساسية اللاكتوز
                   Questions(
-                    questionsText: "هل تشعر بألم أو تشنجات في البطن؟",
+                    questionsText: "هل تشعر بآلام في البطن بعد تناول منتجات الألبان؟",
                     checkQuestionTrue: isColic,
                     checkQuestionFalse: isNoColic,
                     onTrueTap: () {
-                      isNoColic = false;
-                      isColic = true;
+                      setState(() {
+                        isColic = true;
+                        isNoColic = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoColic = true;
-                      isColic = false;
+                      setState(() {
+                        isColic = false;
+                        isNoColic = true;
+                      });
                     },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  //حساسية اللاكتوز
                   Questions(
-                    questionsText:
-                        "هل يوجد براز سائل بعد تناول منتجات الألبان؟",
-                    checkQuestionTrue: isColic,
-                    checkQuestionFalse: isNoColic,
+                    questionsText: "هل تشعر بالإسهال بعد تناول منتجات الألبان؟",
+                    checkQuestionTrue: isDiarrhea,
+                    checkQuestionFalse: isNoDiarrhea,
                     onTrueTap: () {
-                      isNoColic = false;
-                      isColic = true;
+                      setState(() {
+                        isDiarrhea = true;
+                        isNoDiarrhea = false;
+                      });
                     },
                     onFalseTap: () {
-                      isNoColic = true;
-                      isColic = false;
+                      setState(() {
+                        isDiarrhea = false;
+                        isNoDiarrhea = true;
+                      });
                     },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      if (isThirst ||
-                          isNoThirst ||
-                          isShortBreath ||
-                          isNoShortBreath ||
-                          isDifficultyBreathing ||
-                          isNoDifficultyBreathing) {
-                        choseIllness();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ));
-                      } else {
-                        print("يرجى الإجابة على جميع الأسئلة");
-                      }
+                  Questions(
+                    questionsText: "هل تشعر بالإنتفاخ بعد تناول منتجات الألبان؟",
+                    checkQuestionTrue: isBloating,
+                    checkQuestionFalse: isNoBloating,
+                    onTrueTap: () {
+                      setState(() {
+                        isBloating = true;
+                        isNoBloating = false;
+                      });
                     },
-                    child: Container(
-                      width: 200,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: const Color(0xffc8c1c1)),
-                      child: const Text(
-                        "انتهيت",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
+                    onFalseTap: () {
+                      setState(() {
+                        isBloating = false;
+                        isNoBloating = true;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Questions(
+                    questionsText: "هل تشعر بالغثيان بعد تناول منتجات الألبان؟",
+                    checkQuestionTrue: isNausea,
+                    checkQuestionFalse: isNoNausea,
+                    onTrueTap: () {
+                      setState(() {
+                        isNausea = true;
+                        isNoNausea = false;
+                      });
+                    },
+                    onFalseTap: () {
+                      setState(() {
+                        isNausea = false;
+                        isNoNausea = true;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      choseIllness();
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(280, 50),
+                      backgroundColor: const Color(0xffFDB640),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                  )
+                    child: Text(
+                      "حفظ",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

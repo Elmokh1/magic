@@ -96,6 +96,11 @@ class MyDataBase {
   static Stream<QuerySnapshot<SectionsModel>> getSectionsRealTimeUpdate() {
     return getSectionsCollection().snapshots();
   }
+  static Stream<QuerySnapshot<SectionsModel>> getSectionsRealTimeUpdateForRecommend(String sectionId) {
+    return getSectionsCollection()
+        .where("id", isEqualTo: sectionId)
+        .snapshots();
+  }
 
   //AddSectionIngredients
   static CollectionReference<SectionsIngredientModel> getSectionIngredientsCollection(String secId) {
