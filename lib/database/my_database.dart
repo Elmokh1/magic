@@ -96,7 +96,9 @@ class MyDataBase {
   static Stream<QuerySnapshot<SectionsModel>> getSectionsRealTimeUpdate() {
     return getSectionsCollection().snapshots();
   }
-  static Stream<QuerySnapshot<SectionsModel>> getSectionsRealTimeUpdateForRecommend(String sectionId) {
+  static Future<void> deleteSection(String sId) {
+    return getSectionsCollection().doc(sId).delete();
+  }  static Stream<QuerySnapshot<SectionsModel>> getSectionsRealTimeUpdateForRecommend(String sectionId) {
     return getSectionsCollection()
         .where("id", isEqualTo: sectionId)
         .snapshots();

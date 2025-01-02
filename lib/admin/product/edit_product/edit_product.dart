@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:magic_bakery/admin/product/edit_product/edit_product.dart';
 import 'package:magic_bakery/database/model/add_product.dart';
 import 'package:magic_bakery/database/model/secttions_model.dart';
@@ -11,7 +12,6 @@ import 'package:magic_bakery/home_screen/setting/settings.dart';
 
 import '../../../all_import.dart';
 import 'edit_product_item.dart';
-
 
 class EditProductPage extends StatefulWidget {
   @override
@@ -151,7 +151,7 @@ class _EditProductPageState extends State<EditProductPage> {
                       );
                     }
                     var sectionList =
-                    snapshot.data?.docs.map((doc) => doc.data()).toList();
+                        snapshot.data?.docs.map((doc) => doc.data()).toList();
                     if (sectionList?.isEmpty == true) {
                       return Center(
                         child: Text(
@@ -172,7 +172,8 @@ class _EditProductPageState extends State<EditProductPage> {
                         return Column(
                           children: [
                             InkWell(
-                              child: SectionReview(sectionsName: section.name??""),
+                              child: SectionReview(
+                                  sectionsName: section.name ?? ""),
                               onTap: () {
                                 Navigator.push(
                                   context,
@@ -226,13 +227,16 @@ class _EditProductPageState extends State<EditProductPage> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     EditProductItem(
-                                                        addProductModel: product,
-                                                      secId: section.id??"",
-                                                    ),
+                                                  addProductModel: product,
+                                                  secId: section.id ?? "",
+                                                ),
                                               ),
                                             );
                                           },
-                                          child: ProductView(addProductModel: product,isVisible: false,),
+                                          child: ProductView(
+                                            addProductModel: product,
+                                            isVisible: false,
+                                          ),
                                         );
                                       },
                                     ),
